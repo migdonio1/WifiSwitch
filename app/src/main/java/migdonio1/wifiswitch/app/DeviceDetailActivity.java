@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -13,6 +15,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -36,12 +40,22 @@ public class DeviceDetailActivity extends AppCompatActivity implements OnMapRead
 
     private Device device;
 
-    private String id;
+    private TextView nameTextView;
+    private TextView sensorsTextView;
+    private TextView switchsTextView;
+
+    private String name;
+    private String sensors;
+    private String switchs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_device_detail);
+
+        nameTextView = (TextView) findViewById(R.id.deviceNameTextView);
+        sensorsTextView = (TextView) findViewById(R.id.deviceSensorTextView);
+        switchsTextView = (TextView) findViewById(R.id.deviceSwitchTextView);
 
         intent = getIntent();
 
@@ -68,6 +82,14 @@ public class DeviceDetailActivity extends AppCompatActivity implements OnMapRead
             @Override
             public void onResponse(Call<Device> call, Response<Device> response) {
                 device = response.body();
+                nameTextView.setText(device.getName());
+
+                sensors = device.getSensors().size() + " Sensores";
+                switchs = device.getSwitchs().size() + " Switchs";
+
+                sensorsTextView.setText(sensors);
+                switchsTextView.setText(switchs);
+
                 moveMap();
             }
 
